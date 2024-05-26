@@ -11,35 +11,33 @@
 export default {
   name: 'UiButton',
   props: {
-    // Params
     type: {
       type: String,
       required: false,
-      default: 'button'
+      default: 'button',
     },
     name: {
       type: String,
       required: false,
-      default: 'action-button'
+      default: 'action-button',
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     // Event
     event: {
       type: Function,
       required: false,
-      default: () => {
-      }
+      default: () => {},
     },
     href: {
       type: String,
       required: false,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 }
 </script>
 

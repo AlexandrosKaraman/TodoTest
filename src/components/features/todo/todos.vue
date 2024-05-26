@@ -17,53 +17,58 @@
 </template>
 
 <script>
+import { onMounted, ref } from 'vue'
+
 import UiCheckbox from '@/components/ui/checkbox/index.vue'
 import FavoriteButton from '@/components/features/todo/favoriteButton.vue'
-import {onMounted, ref} from "vue"
 
 export default {
   name: 'MyTodos',
   components: {
     UiCheckbox,
-    FavoriteButton
+    FavoriteButton,
   },
   props: {
     user: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   setup() {
     const favoriteList = ref([])
-    onMounted(() => {
-      const favorites = JSON.parse(localStorage.getItem('favoriteList'))
-      if (favorites && favorites.length > 0) {
-        favoriteList.value = favorites
-      }
-    })
-    const isFavorite = (id) => favoriteList.value.includes(id)
-    const addToFavorite = (id) => {
+
+    const isFavorite = id => favoriteList.value.includes(id)
+    const addToFavorite = id => {
       if (!favoriteList.value.includes(id)) {
         favoriteList.value.push(id)
         localStorage.setItem('favoriteList', JSON.stringify(favoriteList.value))
       }
     }
-    const removeFromFavorite = (id) => {
+    const removeFromFavorite = id => {
       if (favoriteList.value.includes(id)) {
         const index = favoriteList.value.indexOf(id)
         favoriteList.value.splice(index, 1)
         localStorage.setItem('favoriteList', JSON.stringify(favoriteList.value))
       }
     }
-    const toggleFavorite = (id) => isFavorite(id) ? removeFromFavorite(id) : addToFavorite(id)
+    const toggleFavorite = id =>
+      isFavorite(id) ? removeFromFavorite(id) : addToFavorite(id)
+
+    onMounted(() => {
+      const favorites = JSON.parse(localStorage.getItem('favoriteList'))
+      if (favorites && favorites.length > 0) {
+        favoriteList.value = favorites
+      }
+    })
+
     return {
       favoriteList,
       isFavorite,
       addToFavorite,
       removeFromFavorite,
-      toggleFavorite
+      toggleFavorite,
     }
-  }
+  },
 }
 </script>
 
@@ -71,17 +76,24 @@ export default {
 .todos
   background-color: var(--white-color)
   padding: 15px
+
   &__item
     display: flex
     align-items: center
     justify-content: space-between
     gap: 10px
     padding: 5px
+
     &-ui
       display: flex
       align-items: center
       gap: 10px
+
     &:hover
       opacity: .8
       box-shadow: inset 20px 120px 0 20px wheat
+
+  @media screen and (max-width: 768px)
+    &__item
+      font-size: 12px
 </style>

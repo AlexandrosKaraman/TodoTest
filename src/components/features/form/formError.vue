@@ -9,8 +9,8 @@ export default {
     error: {
       type: String,
       required: false,
-      default: null
-    }
-  }
+      default: null,
+    },
+  },
 }
 </script>

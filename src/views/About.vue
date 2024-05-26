@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import {computed} from "vue"
-import {useStore} from "vuex"
+import { computed } from 'vue'
+import { useStore } from 'vuex'
 
 import widgetsUserDetails from '@/components/widgets/userDetails/index.vue'
 import widgetsTodo from '@/components/widgets/todo/index.vue'
@@ -15,13 +15,15 @@ export default {
   name: 'AboutPage',
   components: {
     widgetsTodo,
-    widgetsUserDetails
+    widgetsUserDetails,
   },
   setup() {
     const store = useStore()
+
     const userId = computed(() => store.getters.getUserId)
-    return {userId}
-  }
+
+    return { userId }
+  },
 }
 </script>
 

@@ -9,9 +9,9 @@ export default {
     title: {
       type: String,
       required: false,
-      default: ''
-    }
-  }
+      default: '',
+    },
+  },
 }
 </script>
 

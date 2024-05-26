@@ -36,21 +36,20 @@ export default {
     item: {
       type: Object,
       required: false,
-      default: () => {
-      }
-    }
-  }
+      default: () => {},
+    },
+  },
 }
 </script>
 
 <style lang="sass" scoped>
 .wrapper
-  min-width: 360px
   border: none
   box-shadow: 0 0 22px 5px rgba(0, 0, 0, 0.2)
   background-color: var(--white-color)
   display: flex
   flex-direction: column
+
   .item
     width: 100%
     border-radius: 5px
@@ -58,7 +57,12 @@ export default {
     display: flex
     align-items: center
     column-gap: 6px
+
     strong
       padding: 5px
       border-radius: 5px
+
+  @media screen and (max-width: 768px)
+    .item, strong
+      font-size: 12px
 </style>

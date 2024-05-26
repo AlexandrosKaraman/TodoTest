@@ -33,74 +33,74 @@
 </template>
 
 <script>
-import {computed, ref} from "vue"
-import ArrowDown from "@/components/ui/svg/arrow.vue"
+import { computed, ref } from 'vue'
+import ArrowDown from '@/components/ui/svg/arrow.vue'
 
 export default {
   name: 'UiSelectList',
-  components: {ArrowDown},
+  components: { ArrowDown },
   props: {
     id: {
       type: String,
       required: false,
-      default: 'base_select'
+      default: 'base_select',
     },
     required: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     placeholder: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     label: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     withSearch: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     modelValue: {
       type: [String, Number, Boolean, Object, Array],
       required: false,
-      default: null
+      default: null,
     },
     options: {
       type: Array,
       required: false,
-      default: () => ([])
+      default: () => [],
     },
     messageIsError: {
       type: Boolean,
       required: false,
-      default: false
+      default: false,
     },
     messageText: {
       type: String,
       required: false,
-      default: null
+      default: null,
     },
     updateByLangSwitch: {
       type: Boolean,
       required: false,
-      default: true
-    }
+      default: true,
+    },
   },
   emits: ['update:modelValue'],
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const searchValue = ref('')
     const viewOption = ref(false)
-    const toggleList = (val) => {
+    const toggleList = val => {
       if (!props.disabled) {
         viewOption.value = val !== undefined ? val : !viewOption.value
       }
@@ -108,15 +108,15 @@ export default {
     const closeList = () => {
       viewOption.value = false
     }
-    const updateValue = (val) => {
+    const updateValue = val => {
       if (!props.disabled) {
         emit('update:modelValue', val)
         toggleList(false)
       }
     }
     const filteredOptions = computed(() => {
-      return props.options.filter((o) =>
-          o.name.toLowerCase().includes(searchValue.value.toLowerCase())
+      return props.options.filter(o =>
+        o.name.toLowerCase().includes(searchValue.value.toLowerCase()),
       )
     })
 
@@ -126,9 +126,9 @@ export default {
       toggleList,
       closeList,
       updateValue,
-      filteredOptions
+      filteredOptions,
     }
-  }
+  },
 }
 </script>
 
@@ -140,11 +140,13 @@ export default {
   flex-direction: column
   justify-content: flex-start
   align-items: flex-start
+
   .label
     width: 100%
     margin-bottom: 4px
     color: var(--black-color)
     cursor: pointer
+
   .wrapper_input
     width: 100%
     min-height: 60px
@@ -157,10 +159,12 @@ export default {
     align-items: center
     overflow: hidden
     position: relative
+
     .prefix,
     .suffix
       padding-top: 2px
       cursor: pointer
+
     .field
       width: 100%
       padding: 4px 0 2px
@@ -169,10 +173,12 @@ export default {
       border: none
       outline: none
       box-shadow: inset 20px 120px 0 20px wheat
+
       &[disabled],
       &.disabled
         cursor: not-allowed
         box-shadow: none
+
     .field_loading
       position: absolute
       top: 50%
@@ -180,6 +186,7 @@ export default {
       width: 20px
       height: 20px
       transform: translateY(-50%)
+
       &::after
         content: ' '
         position: absolute
@@ -188,22 +195,29 @@ export default {
         width: 100%
         height: 100%
         animation: rotate 1s linear infinite
+
     &.disabled
       background-color: grey !important
+
       .field
         box-shadow: none
+
     &.with-error
       color: var(--red-color)
       border-color: var(--red-color)
+
       .field::placeholder
         color: var(--red-color)
+
   &.custom_select
     width: 100%
+
     .select_wrapper
       width: 100%
       display: flex
       flex-direction: column
       position: relative
+
       .field
         width: 100%
         gap: 16px
@@ -216,12 +230,16 @@ export default {
         align-items: center
         cursor: pointer
         position: relative
+
         .current_value
           max-width: 100%
           width: 100%
           white-space: nowrap
           text-overflow: ellipsis
           overflow: hidden
+          @media screen and (max-width: 768px)
+            font-size: 14px
+
         .icon
           min-width: 14px
           max-width: 14px
@@ -230,11 +248,14 @@ export default {
           padding: 2px
           margin-left: 8px
           fill: black
+
         &.disabled
           background-color: grey !important
           cursor: not-allowed
+
         &.active .icon
           transform: rotate(180deg)
+
       .options_wrapper
         width: 100%
         max-height: 290px
@@ -250,6 +271,7 @@ export default {
         top: 100%
         left: 0
         z-index: 1
+
         .search_field
           max-width: calc(100% - 20px)
           width: 100%
@@ -264,6 +286,7 @@ export default {
           align-items: center
           outline: none
           z-index: 1
+
         .option
           width: 100%
           min-height: max-content
@@ -273,14 +296,20 @@ export default {
           justify-content: flex-start
           align-items: center
           z-index: 1
+          @media screen and (max-width: 768px)
+            font-size: 14px
+
           &.disabled:hover
             background-color: wheat
             cursor: pointer
+
           &:not(.disabled):hover
             background-color: wheat
             cursor: pointer
+
           &.active
             font-weight: 700
+
   .input_wrapper
     width: 100%
     min-height: 60px
@@ -290,6 +319,7 @@ export default {
     justify-content: flex-start
     align-items: center
     position: relative
+
   .field_btn
     min-height: 22px
     max-height: 22px
@@ -299,9 +329,11 @@ export default {
     flex-direction: row
     justify-content: center
     align-items: center
+
     .icon
       fill: grey
       transition: fill .5s ease
+
     &:hover .icon
       fill: black
 </style>

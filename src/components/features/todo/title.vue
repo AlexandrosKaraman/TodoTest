@@ -5,7 +5,7 @@
 
 <script>
 export default {
-  name: "TodoTitle"
+  name: 'TodoTitle',
 }
 </script>
 

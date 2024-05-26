@@ -17,19 +17,22 @@
       ui-input(placeholder="user-id" v-model="form.userId")
       ui-input(placeholder="title" v-model="form.title")
       ui-button(name="add" @click="addTask")
-    my-todos(:user="filteredTasks()")
+    template(v-if='filteredTasks().length' )
+      my-todos(:user="filteredTasks()")
+    template(v-else)
+      h1 No Data!
 </template>
 
 <script>
-import MyTodos from "@/components/features/todo/todos.vue"
-import TodoTitle from "@/components/features/todo/title.vue"
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { useStore } from 'vuex'
+
+import MyTodos from '@/components/features/todo/todos.vue'
+import TodoTitle from '@/components/features/todo/title.vue'
 import UiSelectList from '@/components/ui/select/index.vue'
 import TodoLogout from '@/components/features/todo/logout.vue'
-import UiInput from "@/components/ui/input/index.vue"
-import UiButton from "@/components/ui/button/index.vue"
-
-import {computed, onMounted, reactive, ref, watch} from "vue"
-import {useStore} from "vuex"
+import UiInput from '@/components/ui/input/index.vue'
+import UiButton from '@/components/ui/button/index.vue'
 
 export default {
   name: 'WidgetsTodo',
@@ -39,54 +42,60 @@ export default {
     TodoLogout,
     TodoTitle,
     MyTodos,
-    UiSelectList
+    UiSelectList,
   },
   props: {
     userId: {
       type: Number,
       required: true,
-      default: null
-    }
+      default: null,
+    },
   },
   setup() {
     const store = useStore()
+
     const filters = ref([
-      {id: 1, name: 'All'},
-      {id: 2, name: 'Completed'},
-      {id: 3, name: 'Uncompleted'},
-      {id: 4, name: 'Favorites'}
+      { id: 1, name: 'All' },
+      { id: 2, name: 'Completed' },
+      { id: 3, name: 'Uncompleted' },
+      { id: 4, name: 'Favorites' },
     ])
+    const selectedFilter = ref({ id: 1, name: 'All' })
+    const selectedUser = ref(null)
+
     const form = reactive({
       userId: null,
-      title: null
+      title: null,
     })
+
     const usersOptions = computed(() => store.getters.getUsersForSelect)
+    const tasks = computed(() => store.getters.getTasks)
+    const userId = computed(() => store.getters.getUserId)
+
     const addTask = () => {
       store.dispatch('addTask', form)
     }
-    const selectedFilter = ref({id: 1, name: 'All'})
-    const selectedUser = ref(null)
-    const tasks = computed(() => store.getters.getTasks)
-    const userId = computed(() => store.getters.getUserId)
     const filteredTasks = () => {
       let _tasks = tasks.value
       switch (selectedFilter.value.id) {
         case 2:
-          _tasks = _tasks.filter(({completed}) => completed === true)
+          _tasks = _tasks.filter(({ completed }) => completed === true)
           break
         case 3:
-          _tasks = _tasks.filter(({completed}) => completed === false)
+          _tasks = _tasks.filter(({ completed }) => completed === false)
           break
         case 4:
-          _tasks = _tasks.filter((task) => {
+          _tasks = _tasks.filter(task => {
             const favorite = JSON.parse(localStorage.getItem('favoriteList'))
-            let isFavorite = false
-            for (let i = 0, l = favorite.length; i < l; i += 1) {
-              if (favorite[i] === task.id) {
-                isFavorite = true
+            if (favorite !== null) {
+              let isFavorite = false
+              for (let i = 0, l = favorite.length; i < l; i += 1) {
+                if (favorite[i] === task.id) {
+                  isFavorite = true
+                }
               }
+              return isFavorite
             }
-            return isFavorite
           })
           break
       }
@@ -95,23 +104,32 @@ export default {
     const setFirstValueSelectedUser = () => {
       const userIdFromLS = Number(localStorage.getItem('userId'))
       if (userId.value || userIdFromLS) {
-        const find = usersOptions.value.find(option => option.id === userId.value || option.id === userIdFromLS)
+        const find = usersOptions.value.find(
+          option => option.id === userId.value || option.id === userIdFromLS,
+        )
         if (find) selectedUser.value = find
       }
     }
-    watch(selectedFilter, () => {
-      filteredTasks()
-    }, {deep: true})
+
+    watch(
+      selectedFilter,
+      () => {
+        filteredTasks()
+      },
+      { deep: true },
+    )
     watch(selectedUser, () => {
-      store.commit("SET_USER_ID", selectedUser.value.id)
+      store.commit('SET_USER_ID', selectedUser.value.id)
       store.dispatch('fetchTasks')
     })
     watch(usersOptions, (n, o) => {
-      if(o && o.length === 1) setFirstValueSelectedUser()
+      if (o && o.length === 1) setFirstValueSelectedUser()
     })
+
     onMounted(() => {
       setFirstValueSelectedUser()
     })
+
     return {
       form,
       filters,
@@ -119,9 +137,9 @@ export default {
       filteredTasks,
       addTask,
       selectedUser,
-      usersOptions
+      usersOptions,
     }
-  }
+  },
 }
 </script>
 
@@ -131,19 +149,40 @@ export default {
   grid-template-rows: 85px 70px
   width: 100%
   max-width: 900px
+
+  h1
+    text-align: center
+    color: var(--white-color)
+
   &__titles
     display: flex
     align-items: center
     justify-self: flex-end
+
   &__selects
     width: 100%
     display: flex
     gap: 10px
+
   &__input-add
     display: grid
     grid-template-columns: 40% 40% 18%
     justify-content: space-between
     grid-gap: 10px
     margin-bottom: 20px
-</style>
 
+  @media screen and (max-width: 768px)
+    grid-template-rows: 1fr
+
+    &__input-add
+      display: flex
+      flex-direction: column
+
+    &__selects
+      flex-direction: column
+      margin: 15px 0 20px 0
+
+    &__titles
+      .logout
+      display: none
+</style>

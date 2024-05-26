@@ -5,9 +5,10 @@
 
 <script>
 import widgetsLoginForm from '@/components/widgets/form/index.vue'
+
 export default {
   name: 'HomePage',
-  components: {widgetsLoginForm}
+  components: { widgetsLoginForm },
 }
 </script>
 

@@ -12,9 +12,9 @@ export default {
     value: {
       type: Boolean,
       required: false,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 }
 </script>
 
@@ -27,6 +27,7 @@ export default {
   cursor: pointer
   user-select: none
   font-size: 16px
+
 .checkbox input
   width: 16px
   height: 18px
@@ -35,6 +36,7 @@ export default {
   z-index: 999
   opacity: 0
   cursor: pointer
+
 .checkbox-checkmark
   position: absolute
   top: 0
@@ -44,8 +46,10 @@ export default {
   background-color: var(--white-color)
   border: 2px solid #ccc
   border-radius: 4px
+
 .checkbox input:checked ~ .checkbox-checkmark:after
   display: block
+
 .checkbox .checkbox-checkmark:after
   content: ""
   position: absolute

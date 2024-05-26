@@ -5,31 +5,30 @@
 </template>
 
 <script>
-
-import IconStar from "@/components/ui/svg/star.vue"
+import IconStar from '@/components/ui/svg/star.vue'
 
 export default {
   name: 'favoriteButton',
   components: {
-    IconStar
+    IconStar,
   },
   props: {
     todo: {
       type: Object,
       required: true,
-      default: () => ({})
+      default: () => ({}),
     },
     favoriteList: {
       type: Array,
       required: true,
-      default: () => []
+      default: () => [],
     },
     isFavorite: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const toggleFavorite = () => {
       if (props.isFavorite) {
         emit('remove-from-favorite', props.todo.id)
@@ -37,8 +36,10 @@ export default {
         emit('add-to-favorite', props.todo.id)
       }
     }
-    return {toggleFavorite}
-  }
+    return {
+      toggleFavorite,
+    }
+  },
 }
 </script>
 
@@ -46,8 +47,10 @@ export default {
 ::v-deep(.favorite-icon-yellow)
   path
     fill: #FAC608
+
 .favorite-icon
   width: 30px
+
 .favorite-button
   border: none
   background-color: transparent

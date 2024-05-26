@@ -13,40 +13,41 @@
 </template>
 
 <script>
-import {ref, watch} from 'vue'
+import { ref, watch } from 'vue'
 
 export default {
   name: 'UiInput',
   props: {
     value: {
       type: [String, Number],
-      default: ''
+      default: '',
     },
     type: {
       type: String,
-      default: 'text'
+      default: 'text',
     },
     placeholder: {
       type: String,
-      default: ''
+      default: '',
     },
     allowLetters: {
       type: Boolean,
-      default: false
+      default: false,
     },
     allowNumbersAndSymbol: {
       type: Boolean,
-      default: false
+      default: false,
     },
     label: {
       type: String,
-      default: null
+      default: null,
     },
   },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const modelValue = ref(props.value)
     const error = ref('')
-    const updateValue = (event) => {
+
+    const updateValue = event => {
       let value = event.target.value
       if (props.allowLetters) {
         value = value.replace(/[^a-zA-Z]/g, '')
@@ -57,10 +58,14 @@ export default {
       modelValue.value = value
       emit('update:modelValue', modelValue.value)
     }
-    watch(() => props.value, (newVal) => {
-      modelValue.value = newVal
-    })
-    watch(modelValue, (newVal) => {
+
+    watch(
+      () => props.value,
+      newVal => {
+        modelValue.value = newVal
+      },
+    )
+    watch(modelValue, newVal => {
       if (props.regex && !props.regex.test(newVal)) {
         error.value = 'Invalid input'
       } else {
@@ -72,9 +77,9 @@ export default {
     return {
       modelValue,
       error,
-      updateValue
+      updateValue,
     }
-  }
+  },
 }
 </script>
 
@@ -84,9 +89,11 @@ export default {
   display: flex
   flex-direction: column
   row-gap: 14px
+
   .label
     color: var(--grey-color)
     font-size: 15px
+
   .field
     width: 100%
     min-height: 41px

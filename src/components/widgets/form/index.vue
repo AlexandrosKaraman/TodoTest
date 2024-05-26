@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import {computed, ref} from 'vue'
-import {useStore} from 'vuex'
-import {useRouter} from 'vue-router'
+import { computed, ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 import FormError from '@/components/features/form/formError.vue'
 import UiInput from '@/components/ui/input/index.vue'
@@ -19,7 +19,7 @@ import UiButton from '@/components/ui/button/index.vue'
 
 export default {
   name: 'widgetsLoginForm',
-  components: {FormError, UiButton, UiInput},
+  components: { FormError, UiButton, UiInput },
   setup() {
     const store = useStore()
     const router = useRouter()
@@ -30,20 +30,18 @@ export default {
     const phone = ref('')
 
     const getUsers = computed(() => store.getters.getAll)
-
     const filterUsers = computed(() => {
       return getUsers.value.map(user => ({
         id: user.id,
         username: user.username,
-        phone: user.phone
+        phone: user.phone,
       }))
     })
-
     const cleanedUsers = computed(() => {
       return filterUsers.value.map(user => ({
         id: user.id,
         username: user.username.replace(/[\s._]/g, ''),
-        phone: user.phone.replace(/[^0-9\-()]/g, '')
+        phone: user.phone.replace(/[^0-9\-()]/g, ''),
       }))
     })
 
@@ -54,7 +52,9 @@ export default {
       }
       loadStatus.value = true
       loginError.value = false
-      const user = cleanedUsers.value.find(u => u.username === userName.value && u.phone === phone.value)
+      const user = cleanedUsers.value.find(
+        u => u.username === userName.value && u.phone === phone.value,
+      )
       await new Promise(resolve => setTimeout(resolve, 2500))
       if (user) {
         store.commit('SET_USER_ID', user.id)
@@ -71,9 +71,9 @@ export default {
       userName,
       phone,
       loginError,
-      login
+      login,
     }
-  }
+  },
 }
 </script>
 
@@ -83,21 +83,26 @@ export default {
   min-width: 447px
   text-align: center
   background-color: var(--grey-color-100)
+
   &_input
     display: grid
     row-gap: 20px
     padding: 15px 25px 25px 25px
+
   &_button
     width: 200px
     margin: 0 25px 25px 25px
+
     &.loading
       cursor: not-allowed
       color: var(--black-color)
       background-color: var(--yellow-color)
       opacity: .5
+
   &_error
     padding-bottom: 15px
     color: var(--red-color)
+
   @media screen and (max-width: 768px)
     max-width: 347px
     min-width: 347px
