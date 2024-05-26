@@ -94,6 +94,7 @@ export default {
       box-shadow: inset 20px 120px 0 20px wheat
 
   @media screen and (max-width: 768px)
+    padding: 5px
     &__item
       font-size: 12px
 </style>
