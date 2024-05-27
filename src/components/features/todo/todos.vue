@@ -74,6 +74,7 @@ export default {
 
 <style lang="sass" scoped>
 .todos
+  min-height: 200px
   background-color: var(--white-color)
   padding: 15px
 
@@ -94,6 +95,7 @@ export default {
       box-shadow: inset 20px 120px 0 20px wheat
 
   @media screen and (max-width: 768px)
+    min-height: unset
     padding: 5px
     &__item
       font-size: 12px
