@@ -13,6 +13,8 @@
         :options="usersOptions"
         placeholder="Select user"
       )
+    .filters__search
+      ui-input(placeholder='Search...' v-model="searchTitle")
     .filters__input-add
       ui-input(placeholder="user-id" v-model="form.userId")
       ui-input(placeholder="title" v-model="form.title")
@@ -62,6 +64,7 @@ export default {
     ])
     const selectedFilter = ref({ id: 1, name: 'All' })
     const selectedUser = ref(null)
+    const searchTitle = ref('')
 
     const form = reactive({
       userId: null,
@@ -99,6 +102,11 @@ export default {
           })
           break
       }
+      if (searchTitle.value) {
+        _tasks = _tasks.filter(task =>
+          task.title.toLowerCase().includes(searchTitle.value.toLowerCase()),
+        )
+      }
       return _tasks.length > 0 ? _tasks : []
     }
     const setFirstValueSelectedUser = () => {
@@ -125,6 +133,9 @@ export default {
     watch(usersOptions, (n, o) => {
       if (o && o.length === 1) setFirstValueSelectedUser()
     })
+    watch(searchTitle, () => {
+      filteredTasks.value
+    })
 
     onMounted(() => {
       setFirstValueSelectedUser()
@@ -138,6 +149,7 @@ export default {
       addTask,
       selectedUser,
       usersOptions,
+      searchTitle,
     }
   },
 }
@@ -151,6 +163,7 @@ export default {
   max-width: 900px
 
   h1
+    height: 300px
     text-align: center
     color: var(--white-color)
 
@@ -164,6 +177,10 @@ export default {
     display: flex
     gap: 10px
 
+  &__search
+    max-height: 41px
+    margin-bottom: 20px
+
   &__input-add
     display: grid
     grid-template-columns: 40% 40% 18%
@@ -173,6 +190,9 @@ export default {
 
   @media screen and (max-width: 768px)
     grid-template-rows: 1fr
+
+    h1
+      font-size: 24px
 
     &__input-add
       display: flex
